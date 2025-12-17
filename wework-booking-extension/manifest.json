@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "WeWork Desk Booking Assistant",
+  "version": "1.0.0",
+  "description": "Automatically book WeWork desks with bulk day selection",
+  "permissions": [
+    "storage",
+    "webRequest",
+    "tabs",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://members.wework.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://members.wework.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  }
+}

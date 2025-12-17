@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeWork Desk Booking</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>WeWork Desk Booking</h1>
+      <div class="auth-status" id="authStatus">
+        <span class="status-indicator" id="statusIndicator"></span>
+        <span id="authText">Checking authentication...</span>
+      </div>
+    </div>
+
+    <!-- Login Section (shown when not authenticated) -->
+    <div class="login-section" id="loginSection" style="display: none;">
+      <div class="login-card">
+        <h2>Authentication Required</h2>
+        <p>Please log in to WeWork or visit <a href="https://members.wework.com" target="_blank">members.wework.com</a> to authenticate.</p>
+        <button id="openWeWorkBtn" class="btn btn-primary">Open WeWork</button>
+        <button id="refreshTokenBtn" class="btn btn-secondary">Refresh Token</button>
+      </div>
+    </div>
+
+    <!-- Main Booking Section -->
+    <div class="booking-section" id="bookingSection" style="display: none;">
+      <!-- Location Info -->
+      <div class="location-info">
+        <p><strong>Location:</strong> RMZ Latitude Commercial, Bengaluru</p>
+        <p><strong>Space ID:</strong> <span id="spaceId">147</span></p>
+      </div>
+
+      <!-- Calendar Container -->
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button id="prevMonth" class="nav-btn">‹</button>
+          <h2 id="currentMonthYear"></h2>
+          <button id="nextMonth" class="nav-btn">›</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="calendar-actions">
+          <button id="selectAllBtn" class="btn btn-secondary">Select All</button>
+          <button id="clearSelectionBtn" class="btn btn-secondary">Clear</button>
+        </div>
+      </div>
+
+      <!-- Selected Dates Summary -->
+      <div class="selected-dates" id="selectedDates" style="display: none;">
+        <h3>Selected Dates (<span id="selectedCount">0</span>)</h3>
+        <div class="selected-list" id="selectedList"></div>
+      </div>
+
+      <!-- Booking Options -->
+      <div class="booking-options">
+        <div class="time-settings">
+          <label>
+            <input type="checkbox" id="skipSundays" checked>
+            Skip Sundays
+          </label>
+          <div class="time-inputs">
+            <div>
+              <label>Weekday Start:</label>
+              <input type="time" id="weekdayStart" value="08:00">
+            </div>
+            <div>
+              <label>Weekday End:</label>
+              <input type="time" id="weekdayEnd" value="20:00">
+            </div>
+            <div>
+              <label>Saturday Start:</label>
+              <input type="time" id="saturdayStart" value="10:00">
+            </div>
+            <div>
+              <label>Saturday End:</label>
+              <input type="time" id="saturdayEnd" value="16:00">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book All Button -->
+      <button id="bookAllBtn" class="btn btn-primary btn-large" disabled>
+        Book All Selected Dates
+      </button>
+
+      <!-- Progress Section -->
+      <div class="progress-section" id="progressSection" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="progress-text" id="progressText">Processing...</p>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section" id="resultsSection" style="display: none;">
+        <div class="result-card" id="resultCard">
+          <h3 id="resultTitle"></h3>
+          <div id="resultDetails"></div>
+          <button id="closeResultsBtn" class="btn btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
