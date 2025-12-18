@@ -124,3 +124,43 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 });
+
+// Handle alarm events for reminders
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name && alarm.name.startsWith('wework-reminder-')) {
+    // Extract booking date from alarm name
+    const parts = alarm.name.split('-');
+    if (parts.length >= 4) {
+      const bookingDate = parts.slice(2, -1).join('-'); // Get date part
+      const daysBefore = parts[parts.length - 1];
+      
+      // Get reminder details from storage
+      chrome.storage.local.get(['weworkReminders', 'selectedLocation'], (result) => {
+        const reminders = result.weworkReminders || [];
+        const location = result.selectedLocation || { name: 'WeWork Location' };
+        
+        const reminder = reminders.find(r => 
+          r.bookingDate === bookingDate && r.daysBefore.toString() === daysBefore
+        );
+        
+        if (reminder) {
+          const bookingDateObj = new Date(bookingDate);
+          const formattedDate = bookingDateObj.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+          });
+          
+          // Show notification
+          chrome.notifications.create({
+            type: 'basic',
+            iconUrl: chrome.runtime.getURL('icons/48.png'),
+            title: 'WeWork Booking Reminder',
+            message: `Your booking at ${location.name} expires in ${daysBefore} day(s) on ${formattedDate}`,
+            priority: 2
+          });
+        }
+      });
+    }
+  }
+});

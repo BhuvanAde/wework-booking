@@ -8,10 +8,13 @@
     "webRequest",
     "tabs",
     "activeTab",
-    "scripting"
+    "scripting",
+    "notifications",
+    "alarms"
   ],
   "host_permissions": [
-    "https://members.wework.com/*"
+    "https://members.wework.com/*",
+    "https://wework.co.in/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -26,9 +29,18 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://members.wework.com/*"],
+      "matches": [
+        "https://members.wework.com/*",
+        "https://wework.co.in/*"
+      ],
       "js": ["content.js"],
       "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["response.json"],
+      "matches": ["<all_urls>"]
     }
   ],
   "icons": {

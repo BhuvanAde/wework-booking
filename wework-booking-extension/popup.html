@@ -10,10 +10,21 @@
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <h1>WeWork Desk Booking</h1>
-      <div class="auth-status" id="authStatus">
-        <span class="status-indicator" id="statusIndicator"></span>
-        <span id="authText">Checking authentication...</span>
+      <div class="header-main">
+        <div class="header-title-group">
+          <h1>WeWork Desk Booking</h1>
+          <p class="header-subtitle">Manage your desk location & bookings</p>
+        </div>
+        <button id="editLocationBtn" class="header-location-trigger">
+          <span id="locationName">RMZ Latitude Commercial, Bengaluru</span>
+          <span class="header-location-caret">▾</span>
+        </button>
+      </div>
+      <div class="header-meta">
+        <div class="auth-status auth-pill" id="authStatus">
+          <span class="status-indicator" id="statusIndicator"></span>
+          <span id="authText">Checking authentication...</span>
+        </div>
       </div>
     </div>
 
@@ -29,10 +40,39 @@
 
     <!-- Main Booking Section -->
     <div class="booking-section" id="bookingSection" style="display: none;">
-      <!-- Location Info -->
-      <div class="location-info">
-        <p><strong>Location:</strong> RMZ Latitude Commercial, Bengaluru</p>
-        <p><strong>Space ID:</strong> <span id="spaceId">147</span></p>
+      <!-- Location Info (removed Space ID UI; managed via header dropdown only) -->
+
+      <!-- Location Selector (shown when editing location) -->
+      <div class="location-selector" id="locationSelector" style="display: none;">
+        <h3>Select Location</h3>
+        <div class="location-selector-controls">
+          <div class="location-city-select">
+            <label for="locationCitySelect">City</label>
+            <select id="locationCitySelect">
+              <option value="bangalore">Bangalore</option>
+              <option value="mumbai">Mumbai</option>
+              <option value="hyderabad">Hyderabad</option>
+              <option value="pune">Pune</option>
+              <option value="gurugram">Gurugram</option>
+              <option value="noida">Noida</option>
+              <option value="delhi-ncr">Delhi NCR</option>
+            </select>
+          </div>
+          <div class="location-search">
+            <label for="locationSearch">Search</label>
+            <input
+              type="text"
+              id="locationSearch"
+              placeholder="Search by building or area"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+        <p id="locationSelectorStatus" class="muted-text">Loading WeWork locations...</p>
+        <div id="locationList" class="location-list"></div>
+        <div class="location-selector-actions">
+          <button id="cancelLocationEditBtn" class="btn btn-secondary btn-small">Cancel</button>
+        </div>
       </div>
 
       <!-- Calendar Container -->
@@ -83,28 +123,71 @@
         </div>
       </div>
 
-      <!-- Book All Button -->
-      <button id="bookAllBtn" class="btn btn-primary btn-large" disabled>
-        Book All Selected Dates
-      </button>
-
-      <!-- Progress Section -->
-      <div class="progress-section" id="progressSection" style="display: none;">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
+      <!-- Progress Section (full-screen overlay while booking) -->
+      <div class="progress-section booking-overlay" id="progressSection" style="display: none;">
+        <div class="loader-container">
+          <div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+            <div class="wheel"></div>
+            <div class="hamster">
+              <div class="hamster__body">
+                <div class="hamster__head">
+                  <div class="hamster__ear"></div>
+                  <div class="hamster__eye"></div>
+                  <div class="hamster__nose"></div>
+                </div>
+                <div class="hamster__limb hamster__limb--fr"></div>
+                <div class="hamster__limb hamster__limb--fl"></div>
+                <div class="hamster__limb hamster__limb--br"></div>
+                <div class="hamster__limb hamster__limb--bl"></div>
+                <div class="hamster__tail"></div>
+              </div>
+            </div>
+            <div class="spoke"></div>
+          </div>
         </div>
         <p class="progress-text" id="progressText">Processing...</p>
+        <div class="booking-progress-details" id="bookingProgressDetails"></div>
       </div>
 
-      <!-- Results Section -->
-      <div class="results-section" id="resultsSection" style="display: none;">
+      <!-- Results Section (full-screen overlay after booking) -->
+      <div class="results-section booking-overlay" id="resultsSection" style="display: none;">
         <div class="result-card" id="resultCard">
           <h3 id="resultTitle"></h3>
-          <div id="resultDetails"></div>
+          <div id="resultDetails" class="result-details"></div>
+          <div id="reminderSection" class="reminder-section" style="display: none;">
+            <h4>Set Reminder</h4>
+            <p class="reminder-description">Get notified before your bookings expire</p>
+            <div class="reminder-options">
+              <label class="reminder-option">
+                <input type="radio" name="reminderDays" value="1" id="reminder1Day">
+                <span>1 day before</span>
+              </label>
+              <label class="reminder-option">
+                <input type="radio" name="reminderDays" value="2" id="reminder2Days" checked>
+                <span>2 days before</span>
+              </label>
+              <label class="reminder-option">
+                <input type="radio" name="reminderDays" value="3" id="reminder3Days">
+                <span>3 days before</span>
+              </label>
+              <label class="reminder-option">
+                <input type="radio" name="reminderDays" value="7" id="reminder7Days">
+                <span>1 week before</span>
+              </label>
+            </div>
+            <button id="setReminderBtn" class="btn btn-primary">Set Reminder</button>
+          </div>
           <button id="closeResultsBtn" class="btn btn-secondary">Close</button>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Sticky Booking Footer -->
+  <div class="booking-footer" id="bookingFooter" style="display: none;">
+    <button id="bookAllBtn" class="btn btn-primary btn-large" disabled>
+      Book All Selected Dates
+    </button>
   </div>
 
   <script src="popup.js"></script>
